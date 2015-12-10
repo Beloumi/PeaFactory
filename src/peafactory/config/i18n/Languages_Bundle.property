@@ -1,0 +1,189 @@
+### general:
+program_bug = An unexpected error occured during program execution
+warning = warning
+
+
+##################
+### PeaFactory ###
+# Error display with OptionPane:
+password2_is_null = you must type the password again
+different_password = passwords are different
+no_password_warning = no password - program continues with null password...
+short_password_warning = Warning:\n insecure password: length should be minimum 12 \n\n Program continues with short password...
+# Info about new created pea: 
+new_pea_info = A new password encrypted archive was created: 
+new_pea_type_info = You can now copy/cut that pea as the
+directory = directory
+file = jar file
+new_pea_location_info = from this directory: 
+open_directory = Want the directory to be opened now?
+desktop_error = Sorry, you have to open the file browser manually... 
+
+
+##########################
+### MainView #############
+###### Constructor and TextTypePanel and ImageTypePanel: ######
+### LanguageMenu: 
+tooltip_language = change language - all settings will be lost
+### TextType (EditorType, NoteType):
+area_label = text to encrypt: 
+tooltip_textarea = content of the jar file
+invalid_rtf_file = selected rft file is invalid
+changeable_text_button = display of text that may be modified
+format_text_button = simple editor to diplay, modify and format text
+external_file = external file
+internal_file = file in jar archive
+open_file_button = open file
+tooltip_open_file_button = select a file to encrypt 
+new_file_button = new file
+tooltip_new_file_button = create a new file with new content to encrypt 
+### ImageType:
+invalid_image_file = Invalid file. \n This file is not an valid image for this program. 
+internal_image = copy image beside jar archive
+tooltip_internal_image = existing image will be uneffected; only a copy will be put in the directory of the jar archive and encrypted
+external_image = encrypt existing image
+tooltip_external_image = selected image will be encrypted and can only be decrypted with created jar archive
+open_image_button = open image file
+tooltip_open_image_button = select an image file to encrypt
+### Labels, buttons and text fields in MainView:
+char_table = character table
+psw_label = password to encrypt:
+tooltip_psw = password should be minimum length of 12, using uppercase and lowercase letters, numbers and symbols
+psw_label_2 = type again
+tooltip_psw2 = check if typing was correct
+jar_name_label = name of jar-file (without .jar):
+tooltip_jarname = name of the created jar file
+above_pswfield_label = text above password field (max. 40 characters):
+tooltip_text_above = this will be displayed above the password field, when the file will be opened
+# new_project - in Menu
+create_jarfile_button = create encrypted jar file
+tooltip_create = create the jar file with with specified data
+###### MainView and TextTypePanel and ImageTypePanel actionPerformed: ######
+### JOptionPane: shown in MainView if a text or image file was selected
+option_overwrite_file = overwrtite existing file
+option_copy_file = take a copy of this file and give it along the jar archive
+option_cancel = cancel
+deal_with_file = How to deal with the selected file?
+no_read_access_to_file = There is no read access to the file: 
+no_write_access_to_file = There is no write access to the file:
+### JOptionPane: shown in MainView for new text file
+overwrite_existing_file = There is already a file with this name. Delete (overwrite) existing file?
+### JOptionPane: shown in MainView, ask for the default file (FileType)
+ask_default_file = Should this file be displayed as default file\n\ 
+	when open the archive?\n\
+	(That will not work platform-independent).\n\n
+
+
+#################################
+###    Menu in MainView:    #####
+menu = Menu
+new_project = new project
+random_password = create new random password
+quit = quit
+settings = Settings
+set_security_level = Set security level
+thoughtless = thoughtless
+low = low
+standard = standard
+high = high
+paranoid = paranoid (may not execute on some systems)
+set_crypt = crypto stuff
+set_kdf = set key derivation function
+set_scrypt = scrypt - key derivation based on Salsa20/8
+set_bcrypt = bcrypt - key derivation based on blowfish-cipher
+set_cipher = set cipher algorithm
+set_twofish = Twofish (256 Bit)
+set_threefish256 = Threefish (256 Bit)
+set_threefish512 = Threefish (512 Bit)
+set_threefish1024 = Threefish (1024 Bit)
+set_serpent = Serpent (256 Bit)
+set_aes = AES (256 Bit)
+set_aes_fast = fast AES (128), recommended for large files
+set_shacal2 = Shacal-2 (512 Bit)
+set_hash = set hash function
+set_ripemd256 = RIPEMD (256 Bit)
+set_ripemd320 = RIPEMD (320 Bit)
+set_sha3 = SHA-3
+set_sha512 = SHA-512
+set_sha384 = SHA-384
+set_skein512 = Skein512
+set_whirlpool = Whirlpool (512 Bit)
+set_params = set key derivation function parameters (this session)
+set_scrypt_params = parameters for scrypt
+set_bcrypt_params = parameters for bcrypt
+keyboard = add onscreen keyboard for login to prevent keylogger spy programs
+add_keyboard = add onscreen keyboard?
+psw_generator = random password generator (for notes or editor pea)
+add_psw_generator = add a button/item for a random password generator (for notes or editor pea only)
+set_image_params = parameter for image files
+set_language = language
+set_de = Deutsch
+set_en = English
+help = Help
+notes_on_security = notes on security
+problem_help = help for some problems
+how_to_use = how to use
+about_cipher = about the ciphers
+about_kdf = about the key derivation functions
+about_license = license
+# Dialogs in Menu:
+problem_help_dialog = Some problem that may occur while executing a pea: \n\n\
+		 - If you can't start the file by double click (in Linux and BSD): \n\
+			Start in terminal: Go into the directory of the jar file and type:   java -jar FILENAME.jar\n\n\
+		- If you can't run the file by terminal command: \n\
+			Make sure you have installed at least java version 1.6 (to check type:   java -version).\n\
+			Make the jar file executable by typing   sudo chmod +x FILENAME.jar. \n\
+			Make sure, the default to open jar files is Java (not archive programs). \n\n\
+		- If you get an error depends on memory problems:\n\
+			Set the security level lower or set the memory parameter for the key derivation \n\
+			or choose bcrypt as key derivation. 
+how_to_use_dialog = Fill out the fields, click the button at the bottom and \n\
+	look for the file of the given name in the directory \"peas\". \n\
+	This may be an directory containing the jar file and the encrypted stuff beside \n\
+	or only a single jar file.\n\
+	If you didn't type a name for the file, the name will be default.jar. \n\
+	You can cut/copy that pea than where ever you want like to external devices. 
+about_license_dialog = GPL. For deviating licenses have a look at the source code. 
+
+##############################
+### RandomPasswordDialog   ###
+random_label = select password, copy with CTRL + C and paste with CTRL + V
+random_password_title = Random Password
+
+
+#################
+### DataTypes ###
+# short decriptions of DataTypes
+editor_description = Notebook (editor)
+image_description = Image 
+notes_description = Notebook
+file_description = File and directory encryption
+
+
+########################
+### ProjectSelection ###
+project_selection_title = Project selection
+selection_type_label = select a project (type of encrypted jar archive)
+selection_file_button = File or folder encryption
+tooltip_selection_file_button = archive decrypts selected files for correct password
+selection_notes_button = Notebook
+tooltip_selection_notes_button = jar archive displays (plain) text for correct password
+selection_editor_check = Simple editor for notes
+tooltip_selection_editor_check = includes the possibility of formatting of text size, color, redo/undo actions etc.
+selection_image_button = Image display
+tooltip_selection_image_button = The jar archive displays a selected image for correct password
+tooltip_project_ok_button = start program for selected project
+
+##########################
+###   FileTypePanel:   ###
+extreme_size_warning = You have selected a total size of more than 1 GiB.\n\
+	This program is not well suited for such a file size.\n\
+	It is recommended instead to use rather hard disk encryption programs.\n\
+	If you still want to use this program, the execution may take a very long time.\n\
+	Do you want to continue?
+size_warning = This will take some time, because of the file size \n\
+	(You can disable files by clicking their check boxes). \n\
+	Do you want to continue?
+number_warning = You have selected a very large number of files. This will take some time.\n\
+	(You can disable files by clicking their check boxes). \n\
+	Do you want to continue?	
