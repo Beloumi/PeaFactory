@@ -54,7 +54,7 @@ import cologne.eck.peafactory.tools.Zeroizer;
 public class PswDialogView extends JDialog implements WindowListener,
 		ActionListener, KeyListener {
 	
-	private static final Color color1 = new Color(230, 249, 233);
+	private static final Color peaColor = new Color(230, 249, 233);//(178, 241, 177);//(230, 249, 233);
 	private static final Color messageColor = new Color(252, 194, 171);//(255, 216, 151)
 //	private static final Color color2 = new Color(38, 175, 54);
 	
@@ -87,6 +87,8 @@ public class PswDialogView extends JDialog implements WindowListener,
 	
 	private PswDialogView() {
 		
+		setUI();
+		
 		languagesBundle = PswDialogBase.getBundle();
 		
 		fileType = PswDialogBase.getFileType();
@@ -94,6 +96,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 		dialog = this;
 		this.setTitle(PeaSettings.getJarFileName() );
 				
+		this.setBackground(peaColor);
 
 		URL url = this.getClass().getResource("resources/pea-lock.png");
 		if (url == null) {
@@ -116,6 +119,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 		JPanel topPanel = (JPanel) this.getContentPane();
 		// more border for right and bottom to start
 		// EntropyPool if there is no password
+		topPanel.setBackground(peaColor);
 		topPanel.setBorder(new EmptyBorder(5,5,15,15));
 		
 		topPanel.addMouseMotionListener(new MouseRandomCollector() );
@@ -548,16 +552,20 @@ public class PswDialogView extends JDialog implements WindowListener,
 	// Helper Functions
 	
 	public final static void setUI() {
-//		UIManager.put("Button.background", color1 );					
-//		UIManager.put("MenuBar.background", color1 ); // menubar
+//		UIManager.put("Button.background", peaColor );					
+//		UIManager.put("MenuBar.background", peaColor ); // menubar
 //		UIManager.put("MenuItem.background", color2 ); // menuitem
-		UIManager.put("PopupMenu.background", color1 );	//submenu					
+		UIManager.put("PopupMenu.background", peaColor );	//submenu					
 //		UIManager.put("ComboBox.selectionBackground", color2 );// language menu					
-		UIManager.put("OptionPane.background", color1 );
-		UIManager.put("Panel.background", color1 );
-		UIManager.put("RadioButton.background", color1 );
-		UIManager.put("ToolTip.background", color1 );
-		UIManager.put("CheckBox.background", color1 );	
+		UIManager.put("OptionPane.background", peaColor );
+		UIManager.put("Panel.background", peaColor );
+		UIManager.put("RadioButton.background", peaColor );
+		UIManager.put("ToolTip.background", peaColor );
+		UIManager.put("CheckBox.background", peaColor );	
+		
+		UIManager.put("InternalFrame.background", peaColor );
+		UIManager.put("ScrollPane.background", peaColor );
+		UIManager.put("Viewport.background", peaColor );	
 		// ScrollBar.background  Viewport.background
 	}
 	
@@ -621,7 +629,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 		return fileLabel.getText();
 	}
 	public final static Color getPeaColor(){
-		return color1;
+		return peaColor;
 	}
 	
 	/**
