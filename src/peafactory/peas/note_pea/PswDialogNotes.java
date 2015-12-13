@@ -59,6 +59,14 @@ class PswDialogNotes extends PswDialogBase {
 		if(args.length > 0) {
 			PswDialogBase.setWorkingMode(args[0]);
 		}
+		
+		// if the previously internal file was moved to another place: 
+		if(PeaSettings.getExternFile() == false &&
+				new File("resources" + File.separator + "text.lock").exists() == false) {
+			PeaSettings.setExternFile(true);
+			PswDialogBase.setEncryptedFileName("");
+		}
+
 		initializeVariables();		
 
 		// settings:
