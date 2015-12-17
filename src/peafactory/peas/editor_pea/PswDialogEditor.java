@@ -22,12 +22,16 @@ package cologne.eck.peafactory.peas.editor_pea;
  */
 
 
+import java.io.File;
+import java.util.Arrays;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
 import settings.PeaSettings;
 import cologne.eck.peafactory.crypto.CipherStuff;
 import cologne.eck.peafactory.peas.PswDialogBase;
+import cologne.eck.peafactory.peas.gui.NewPasswordDialog;
 import cologne.eck.peafactory.peas.gui.PswDialogView;
 import cologne.eck.peafactory.tools.Attachments;
 import cologne.eck.peafactory.tools.Converter;
@@ -40,6 +44,7 @@ public final class PswDialogEditor extends PswDialogBase {
 	private static PswDialogView dialogView;
 	private static PswDialogEditor pswDialog;
 	private static LockFrameEditor lockFrame; 
+
 
 	private PswDialogEditor() {
 		
@@ -62,14 +67,13 @@ public final class PswDialogEditor extends PswDialogBase {
 		if(args.length > 0) {
 			PswDialogBase.setWorkingMode(args[0]);
 		}		
-		
 		// if the previously internal file was moved to another place: 
 		if(PeaSettings.getExternFile() == false &&
 				new File("resources" + File.separator + "text.lock").exists() == false) {
 			PeaSettings.setExternFile(true);
 			PswDialogBase.setEncryptedFileName("");
 		}
-
+		
 		initializeVariables();
 		
 		// settings:
@@ -86,6 +90,22 @@ public final class PswDialogEditor extends PswDialogBase {
 		setDialog(pswDialog);		
 		
 		PswDialogEditor.dialogView.setVisible(true);
+		
+		if (PswDialogView.isInitializing() == true) {
+			
+			NewPasswordDialog.setRandomCollector(true);
+			NewPasswordDialog newPswDialog = NewPasswordDialog.getInstance(PswDialogEditor.dialogView);
+			pswDialog.setInitializedPassword( newPswDialog.getDialogInput() );
+			NewPasswordDialog.setRandomCollector(false);
+
+			if (newPswDialog.getDialogInput() == null
+					|| Arrays.equals(newPswDialog.getDialogInput(), "no password".toCharArray() )) {
+				PswDialogView.setMessage("Program continues with no password.\n "
+						+ "You can set the password later.");
+			} else {
+				PswDialogEditor.dialogView.clickOkButton();
+			}
+		}
 	}
 	
 	private final void displayText(byte[] plainBytes) {
@@ -115,6 +135,8 @@ public final class PswDialogEditor extends PswDialogBase {
 	
 	//====================================
 	// Getter & Setter
+	
+
 	protected final static LockFrameEditor getLockFrame() {
 		return lockFrame;
 	}
@@ -152,22 +174,25 @@ public final class PswDialogEditor extends PswDialogBase {
 		byte[] keyMaterial = getKeyMaterial();
 
 		if (keyMaterial == null) { // bug
+			System.err.println("keyMaterial null");
 			return;
 		}
-		
+
 		//
 		// decrypt:
 		//	
 		//byte[] plainBytes = CipherStuff.getInstance().decrypt(cipherBytes, keyMaterial, true );
 		byte[] plainBytes = null;
 		if (PswDialogView.isInitializing() == true){
+
+			CipherStuff.getInstance().getSessionKeyCrypt().storeKey(keyMaterial);
 			// one space as content:
 			plainBytes = " ".getBytes(getCharset());
 		} else {
 			// decrypt:
 			plainBytes = CipherStuff.getInstance().decrypt(cipherBytes, keyMaterial, true );
 		}
-		
+
 		if (plainBytes == null) {
 			dialogView.displayErrorMessages("Decryption failed");
 			PswDialogView.clearPassword();
@@ -182,13 +207,6 @@ public final class PswDialogEditor extends PswDialogBase {
 		Zeroizer.zero(plainBytes);
 
 		lockFrame.setVisible(true);		
-
-		if (PswDialogView.isInitializing() == true){
-			// there is only one file: 
-			String[] fileNames = { PswDialogBase.getEncryptedFileName()};
-			// set new password:
-			lockFrame.changePassword(plainBytes, fileNames);
-		}
 
 		PswDialogView.getView().setVisible(false);		
 		
