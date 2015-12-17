@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import cologne.eck.peafactory.peas.PswDialogBase;
+import cologne.eck.peafactory.tools.KeyRandomCollector;
+import cologne.eck.peafactory.tools.MouseRandomCollector;
 import cologne.eck.peafactory.tools.Zeroizer;
 
 
@@ -49,6 +51,8 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 	private static JPasswordField retypePasswordField;
 	
 	private static char[] returnPsw;
+	
+	private static boolean randomCollector = false;
 
 	private NewPasswordDialog(Window owner) {
 
@@ -62,6 +66,9 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		
 		newPswDialog.setLayout(new BoxLayout(newPswDialog.getContentPane(), BoxLayout.Y_AXIS));
 
+		if(randomCollector == true){
+			newPswDialog.addMouseMotionListener(new MouseRandomCollector() );
+		}
 		
 		JPanel pswLabelPanel = new JPanel();
 		pswLabelPanel.setLayout(new BoxLayout(pswLabelPanel, BoxLayout.X_AXIS));
@@ -74,6 +81,9 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		JButton charTableButton = new JButton(PswDialogBase.getBundle().getString("char_table"));
 		charTableButton.addActionListener(this);
 		charTableButton.setActionCommand("charTable1");
+		if(randomCollector == true){
+			charTableButton.addMouseMotionListener(new MouseRandomCollector() );
+		}
 		pswLabelPanel.add(charTableButton);
 		
 		newPswDialog.add(pswLabelPanel);
@@ -81,6 +91,9 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		newPasswordField = new JPasswordField(50);
 		newPasswordField.setActionCommand("newPsw");// Enter
 		newPasswordField.addActionListener(this);
+		if(randomCollector == true){
+			newPasswordField.addKeyListener(new KeyRandomCollector() );
+		}
 		newPswDialog.add(newPasswordField);
 		
 		newPswDialog.add(Box.createVerticalStrut(10));
@@ -96,6 +109,9 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		JButton charTableButton2 = new JButton(PswDialogBase.getBundle().getString("char_table"));
 		charTableButton2.addActionListener(this);
 		charTableButton2.setActionCommand("charTable2");
+		if(randomCollector == true){
+			charTableButton2.addMouseMotionListener(new MouseRandomCollector() );
+		}
 		pswLabelPanel2.add(charTableButton2);
 		
 		newPswDialog.add(pswLabelPanel2);
@@ -103,11 +119,20 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		retypePasswordField = new JPasswordField(50);
 		retypePasswordField.setActionCommand("retypePsw");// Enter
 		retypePasswordField.addActionListener(this);
+		if(randomCollector == true){
+			retypePasswordField.addKeyListener(new KeyRandomCollector() );
+		}
 		newPswDialog.add(retypePasswordField);
 		
 		JPanel okPanel = new JPanel();
+		if(randomCollector == true){
+			okPanel.addMouseMotionListener(new MouseRandomCollector() );
+		}
 		okPanel.setLayout(new BoxLayout(okPanel, BoxLayout.X_AXIS));
 		JButton newPswButton = new JButton("ok");
+		if(randomCollector == true){
+			newPswButton.addMouseMotionListener(new MouseRandomCollector() );
+		}
 		newPswButton.addActionListener(this);
 		newPswButton.setActionCommand("newPsw");// ok-Button
 		okPanel.add(Box.createHorizontalGlue());
@@ -129,6 +154,7 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 		}
 		return newPswDialog;
 	}
+
 	
 	public final char[] getDialogInput() {
 		newPswDialog = null;
@@ -206,5 +232,19 @@ public class NewPasswordDialog extends JDialog implements ActionListener {
 
 			this.dispose();
 		} 
+	}
+
+	/**
+	 * @return the randomCollector
+	 */
+	public static boolean isRandomCollector() {
+		return randomCollector;
+	}
+
+	/**
+	 * @param randomCollector the randomCollector to set
+	 */
+	public static void setRandomCollector(boolean _randomCollector) {
+		NewPasswordDialog.randomCollector = _randomCollector;
 	}
 }
