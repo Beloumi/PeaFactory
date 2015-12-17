@@ -22,9 +22,13 @@ package cologne.eck.peafactory.peas.note_pea;
  */
 
 
+import java.io.File;
+import java.util.Arrays;
+
 import settings.PeaSettings;
 import cologne.eck.peafactory.crypto.CipherStuff;
 import cologne.eck.peafactory.peas.PswDialogBase;
+import cologne.eck.peafactory.peas.gui.NewPasswordDialog;
 import cologne.eck.peafactory.peas.gui.PswDialogView;
 import cologne.eck.peafactory.tools.Attachments;
 import cologne.eck.peafactory.tools.Converter;
@@ -66,7 +70,7 @@ class PswDialogNotes extends PswDialogBase {
 			PeaSettings.setExternFile(true);
 			PswDialogBase.setEncryptedFileName("");
 		}
-
+		
 		initializeVariables();		
 
 		// settings:
@@ -84,6 +88,22 @@ class PswDialogNotes extends PswDialogBase {
 		setDialog(pswDialog);
 			
 		PswDialogNotes.dialogView.setVisible(true);
+		
+		if (PswDialogView.isInitializing() == true) {
+			
+			NewPasswordDialog.setRandomCollector(true);
+			NewPasswordDialog newPswDialog = NewPasswordDialog.getInstance(PswDialogNotes.dialogView);
+			pswDialog.setInitializedPassword( newPswDialog.getDialogInput() );
+			NewPasswordDialog.setRandomCollector(false);
+
+			if (newPswDialog.getDialogInput() == null
+					|| Arrays.equals(newPswDialog.getDialogInput(), "no password".toCharArray() )) {
+				PswDialogView.setMessage("Program continues with no password.\n "
+						+ "You can set the password later.");
+			} else {
+				PswDialogNotes.dialogView.clickOkButton();
+			}
+		}
 	}
 
 	
@@ -117,6 +137,8 @@ class PswDialogNotes extends PswDialogBase {
 		//	
 		byte[] plainBytes = null;
 		if (PswDialogView.isInitializing() == true){
+
+			CipherStuff.getInstance().getSessionKeyCrypt().storeKey(keyMaterial);
 			// one space as content:
 			plainBytes = " ".getBytes(getCharset());
 		} else {
@@ -149,12 +171,6 @@ class PswDialogNotes extends PswDialogBase {
 		if (PeaSettings.getExternFile() == true) {
 			pathFileCheck();
 		}		
-		if (PswDialogView.isInitializing() == true){
-			// there is only one file: 
-			String[] fileNames = { PswDialogBase.getEncryptedFileName()};
-			// set new password:
-			lockFrame.changePassword(plainBytes, fileNames);
-		}
 	}
 
 	@Override
