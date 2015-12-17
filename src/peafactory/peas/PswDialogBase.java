@@ -48,7 +48,6 @@ import cologne.eck.peafactory.tools.WriteResources;
 import cologne.eck.peafactory.tools.Zeroizer;
 
 
-
 public abstract class PswDialogBase { 
 
 	// special panel for PswDialogView, currently only used in fileType:
@@ -61,6 +60,8 @@ public abstract class PswDialogBase {
 	private final static String PATH_FILE_NAME = PeaSettings.getJarFileName() + ".path";
 	
 	private static PswDialogBase dialog;
+	
+	private char[] initializedPassword = null;
 	
 	private static String errorMessage = null;
 	
@@ -215,9 +216,14 @@ public abstract class PswDialogBase {
 		char[] pswInputChars = null;
 		if (PswDialogView.isInitializing() == false){
 			pswInputChars = PswDialogView.getPassword();	
+		} else {
+			pswInputChars = initializedPassword;
 		}
 
 		byte[] keyMaterial = deriveKeyFromPsw(pswInputChars);	
+		
+		Zeroizer.zero(initializedPassword);
+		initializedPassword = null;
 
 		printInformations();
 	
@@ -636,6 +642,13 @@ public abstract class PswDialogBase {
 			}
 		}
 		return languagesBundle;
+	}
+	
+	public char[] getInitializedPasword(){
+		return initializedPassword;
+	}
+	public void setInitializedPassword(char[] psw){
+		initializedPassword = psw;
 	}
 	/**
 	 * @return the workingMode
