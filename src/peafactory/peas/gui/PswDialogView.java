@@ -54,9 +54,8 @@ import cologne.eck.peafactory.tools.Zeroizer;
 public class PswDialogView extends JDialog implements WindowListener,
 		ActionListener, KeyListener {
 	
-	private static final Color peaColor = new Color(230, 249, 233);//(178, 241, 177);//(230, 249, 233);
+	private static final Color peaColor = new Color(230, 249, 233);
 	private static final Color messageColor = new Color(252, 194, 171);//(255, 216, 151)
-//	private static final Color color2 = new Color(38, 175, 54);
 	
 	private static JLabel pswLabel;
 	private static JPasswordField pswField;
@@ -128,8 +127,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 		messageArea.setEditable(false);	
 		messageArea.setLineWrap(true);
 		messageArea.setWrapStyleWord(true);
-		messageArea.setBackground(topPanel.getBackground());
-		
+		messageArea.setBackground(topPanel.getBackground());		
 		
 		okButton = new JButton("ok");
 		okButton.setPreferredSize(new Dimension( 60, 30));
@@ -139,14 +137,11 @@ public class PswDialogView extends JDialog implements WindowListener,
 		// chance to start EntropyPool
 		okButton.addMouseMotionListener(new MouseRandomCollector() );
 		
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
-		
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));		
 		
 		topPanel.add(messageArea);
 		
-		if (initializing == false) {
-		
-			
+		if (initializing == false) {			
 			
 			if (PswDialogBase.getWorkingMode().equals("-r")) { // rescue mode
 				JLabel rescueLabel = new JLabel("=== RESCUE MODE ===");
@@ -260,12 +255,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 				JLabel fileInitializationLabel2 = new JLabel("(you can add more files or directories later).");
 				initPanel2.add(fileInitializationLabel2);
 				initPanel2.add(Box.createHorizontalGlue());
-				topPanel.add(initPanel2);
-;
-				//filePanel = PswDialogBase.getTypePanel();
-				//filePanel.addMouseMotionListener(new MouseRandomCollector() );
-				//topPanel.add(filePanel);
-				
+				topPanel.add(initPanel2);				
 			}
 			
 			JPanel panel = new JPanel();
@@ -279,11 +269,9 @@ public class PswDialogView extends JDialog implements WindowListener,
 			panel.add(okButton);
 			
 			topPanel.add(panel);
-		}
-
+		}		
 		
-		
-		if (PeaSettings.getExternFile() == true){// && initializing == false) {	// display files and menu		
+		if (PeaSettings.getExternFile() == true){		
 			
 			JPanel checkRememberPanel = new JPanel();
 			checkRememberPanel.setLayout(new BoxLayout(checkRememberPanel, BoxLayout.X_AXIS));
@@ -345,15 +333,8 @@ public class PswDialogView extends JDialog implements WindowListener,
 
 	public final void displayErrorMessages(String topic) {
 		
-//		String errorMessage = CipherStuff.getErrorMessage();
-		
 		setMessage(topic + ":\n" + CipherStuff.getErrorMessage());
-		
-/*		JOptionPane.showMessageDialog(this,
-			    topic + ":\n"
-				+ errorMessage + "\n",
-			    "Error",
-			    JOptionPane.ERROR_MESSAGE);*/
+
 		PswDialogView.clearPassword();
 	}
 
@@ -413,15 +394,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 					if (PswDialogBase.getEncryptedFileName() == null) {
 						
 						setMessage(languagesBundle.getString("no_file_selected"));
-						
-					/*	JOptionPane.showMessageDialog(fileLabel,
-								languagesBundle.getString("no_file_selected"),
-						//	    "No file selected.\n" 
-						//		+ "Open a new file.",
-							    "Error",
-							    JOptionPane.ERROR_MESSAGE);
-						
-						pswLabel.setText("no valid file selected");//: search for file in menu");*/
+
 						return;
 					}
 					
@@ -445,7 +418,6 @@ public class PswDialogView extends JDialog implements WindowListener,
 						PswDialogBase.addFilesToPathFile( newName);
 					}
 				}
-
 			}
 			started = false;
 
@@ -469,12 +441,6 @@ public class PswDialogView extends JDialog implements WindowListener,
 		    	
 		    	File file = chooser.getSelectedFile();
 		    	String selectedFileName = file.getAbsolutePath();
-			/*	if (PswDialogBase.getFileType().equals("passwordSafe")) { // directory
-					selectedFileName = selectedFileName
-							+ File.separator 
-							+ PswDialogBase.getJarFileName() + File.separator
-							+ "resources" + File.separator + "password_safe_1.lock";	
-				}*/
 		    	
 		    	if ( PswDialogBase.checkFile(selectedFileName ) == true ) {
 					fileLabel.setText( selectedFileName );
@@ -483,12 +449,6 @@ public class PswDialogView extends JDialog implements WindowListener,
 		    		setMessage(languagesBundle.getString("error") 
 		    				+ "\n" + languagesBundle.getString("no_access_to_file")
 		    				+ "\n" + file.getAbsolutePath());
-/*					JOptionPane.showMessageDialog(fileLabel,
-							languagesBundle.getString("no_access_to_file")
-						    //"No access to file:\n" 
-							+ "   " + file.getAbsolutePath(),
-						    "Error",
-						    JOptionPane.ERROR_MESSAGE); */
 					return;
 		    	}
 		    }
@@ -555,8 +515,7 @@ public class PswDialogView extends JDialog implements WindowListener,
 //		UIManager.put("Button.background", peaColor );					
 //		UIManager.put("MenuBar.background", peaColor ); // menubar
 //		UIManager.put("MenuItem.background", color2 ); // menuitem
-		UIManager.put("PopupMenu.background", peaColor );	//submenu					
-//		UIManager.put("ComboBox.selectionBackground", color2 );// language menu					
+		UIManager.put("PopupMenu.background", peaColor );	//submenu									
 		UIManager.put("OptionPane.background", peaColor );
 		UIManager.put("Panel.background", peaColor );
 		UIManager.put("RadioButton.background", peaColor );
@@ -575,6 +534,13 @@ public class PswDialogView extends JDialog implements WindowListener,
 		dialog.dispose();
 		dialog = new PswDialogView();
 		dialog.setVisible(true);
+	}
+	
+	/**
+	 * Perform he action for ok button. Used for initialization. 
+	 */
+	public void clickOkButton() {
+		okButton.doClick();
 	}
 	
 
