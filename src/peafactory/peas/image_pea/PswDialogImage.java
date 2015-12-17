@@ -32,6 +32,7 @@ package cologne.eck.peafactory.peas.image_pea;
  */
 
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -39,6 +40,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import settings.PeaSettings;
 import cologne.eck.peafactory.crypto.CipherStuff;
 import cologne.eck.peafactory.peas.PswDialogBase;
+import cologne.eck.peafactory.peas.gui.NewPasswordDialog;
 import cologne.eck.peafactory.peas.gui.PswDialogView;
 import cologne.eck.peafactory.tools.Attachments;
 import cologne.eck.peafactory.tools.Converter;
@@ -98,6 +100,25 @@ final class PswDialogImage extends PswDialogBase {
 		setDialog(pswDialog);		
 		
 		PswDialogImage.dialogView.setVisible(true);
+		
+		if (PswDialogView.isInitializing() == true) {
+			
+			NewPasswordDialog.setRandomCollector(true);
+			NewPasswordDialog newPswDialog = NewPasswordDialog.getInstance(PswDialogImage.dialogView);
+			pswDialog.setInitializedPassword( newPswDialog.getDialogInput() );
+			NewPasswordDialog.setRandomCollector(false);
+
+			if (newPswDialog.getDialogInput() == null
+					|| Arrays.equals(newPswDialog.getDialogInput(), "no password".toCharArray() )) {
+				PswDialogView.setMessage("Program continues with no password.\n "
+						+ "You can set the password later.\n\n "
+						+ "Select the image you want to encrypt...");
+			} else {
+				PswDialogView.setMessage("Select the image you want to encrypt...");
+
+				PswDialogImage.dialogView.clickOkButton();
+			}
+		}
 	}
 
 	
@@ -212,6 +233,9 @@ final class PswDialogImage extends PswDialogBase {
 			// a copy of this file + settings will be store beside the jar file
 			// in "resources/text.lock"
 			
+			// set session key:
+			CipherStuff.getInstance().getSessionKeyCrypt().storeKey(keyMaterial);
+			
 			// open FileChooser for Images			
 			JFileChooser chooser = new JFileChooser();
 
@@ -273,12 +297,6 @@ final class PswDialogImage extends PswDialogBase {
 			}
 
 			lockFrame.setVisible(true);		
-		}
-		if (PswDialogView.isInitializing()) {
-
-			String[] fileNames = {PswDialogBase.getEncryptedFileName()};
-			// dialog to set the password
-			lockFrame.changePassword(plainBytes, fileNames );
 		}
 
 		PswDialogView.getView().setVisible(false);		
