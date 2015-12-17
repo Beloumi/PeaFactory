@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
@@ -38,22 +39,7 @@ import cologne.eck.peafactory.peas.PswDialogBase;
 import cologne.eck.peafactory.peas.gui.NewPasswordDialog;
 import cologne.eck.peafactory.peas.gui.PswDialogView;
 import cologne.eck.peafactory.tools.Attachments;
-import cologne.eck.peafactory.tools.Zeroizer;
 
-/*
- * 	main: 
- * 		- PswDialogBase.setFileType("file");	
- * 		- PswDialogBase.initializeVariables(); // KDFScheme, HashAlgo, CipherAlgo, triple, programRandomBytes, fileIdentifier, salt
- * 		- setSessionKeyAndIV ( new RandomStuff().createRandomBytes(
-				CryptStuff.getCipherAlgo().getBlockSize() + CryptStuff.getCipherAlgo().getKeySize() ));
- * 		- pswDialog = PswDialogFile.getInstance();
- * 
- *  protected final static void clearSessionKeyAndIV()
- *  
- *  protected final static String[] getChosenFileNames()
- * 
- * 		lockFrame is initialized in startDecryption
- */
 
 
 
@@ -72,8 +58,6 @@ final class PswDialogFile extends PswDialogBase {
 		pswDialog = this;
 		dialogView = PswDialogView.getInstance();
 	}
-		
-
 	
 	private final static PswDialogFile getInstance() {
 		if (pswDialog == null) {
@@ -82,8 +66,7 @@ final class PswDialogFile extends PswDialogBase {
 			//return null
 		}
 		return pswDialog;
-	}
-	
+	}	
 
 	public static void main(String[] args) {
 		
@@ -113,6 +96,22 @@ final class PswDialogFile extends PswDialogBase {
 		pswDialog = PswDialogFile.getInstance();
 		setDialog(pswDialog);
 		dialogView.setVisible(true);
+		
+		if (PswDialogView.isInitializing() == true) {
+			
+			NewPasswordDialog.setRandomCollector(true);
+			NewPasswordDialog newPswDialog = NewPasswordDialog.getInstance(PswDialogFile.dialogView);
+			pswDialog.setInitializedPassword( newPswDialog.getDialogInput() );
+			NewPasswordDialog.setRandomCollector(false);
+
+			if (newPswDialog.getDialogInput() == null
+					|| Arrays.equals(newPswDialog.getDialogInput(), "no password".toCharArray() )) {
+				PswDialogView.setMessage("Program continues with no password.\n "
+						+ "You can set the password later.");
+			} else {
+				PswDialogFile.dialogView.clickOkButton();
+			}
+		}
 	}
 
 	private boolean validFileFound(FileComposer fc){
@@ -171,12 +170,22 @@ final class PswDialogFile extends PswDialogBase {
 			
 			if ( PswDialogView.isInitializing() == true ){
 				System.out.println("Initialization");
+
 				
 				// reset salt if password failed before:
 				KeyDerivation.setSalt(Attachments.getProgramRandomBytes());
 				// set new salt to attach to file and xor with programRandomBytes
 				KeyDerivation.setAttachedAndUpdateSalt(
 						new RandomStuff().createRandomBytes(KeyDerivation.getSaltSize()));
+				
+				keyMaterial = getKeyMaterial();
+
+				if (keyMaterial == null) { // bug
+					System.err.println("keyMaterial null");
+					return;
+				}
+				// store session key:
+				CipherStuff.getInstance().getSessionKeyCrypt().storeKey(keyMaterial);
 
 				// add files to encrypt:
 				decryptedFilePanel.addAction();		
@@ -195,23 +204,10 @@ final class PswDialogFile extends PswDialogBase {
 				
 				// add selected files to path file to display on next start:
 				PswDialogBase.addFilesToPathFile(decryptedFilePanel.getSelectedFileNames());
-				
-				// set a password
-				NewPasswordDialog newPswDialog = NewPasswordDialog.getInstance(PswDialogView.getView());
-				char[] newPsw = newPswDialog.getDialogInput();
 
 				// create new Nonce and set
 				byte[] nonce = new RandomStuff().createRandomBytes(32);
 				Attachments.setNonce(nonce);
-
-				// derive the key from password and salt
-				keyMaterial = PswDialogFile.deriveKeyFromPsw(newPsw);
-				if (newPsw != null){
-					Zeroizer.zero(newPsw);
-				}
-							
-				// encrypt and set the key in RAM
-				CipherStuff.getInstance().encryptKeyFromKeyMaterial(keyMaterial);
 
 				// delete the file that contains the indicator string  to initialize:
 				File initFile = new File(("resources" + File.separator + "text.lock"));
@@ -236,8 +232,7 @@ final class PswDialogFile extends PswDialogBase {
 				// close this view
 				PswDialogView.getView().setVisible(false);	
 				
-				return;
-				
+				return;				
 			} 
 
 				
@@ -351,7 +346,6 @@ final class PswDialogFile extends PswDialogBase {
 		}
 	}
 
-
 	// used in PswDialogView to add selected file to path file:
 	@Override
 	public String[] getSelectedFileNames() {
@@ -359,4 +353,4 @@ final class PswDialogFile extends PswDialogBase {
 		return ( (FileTypePanel)dialogView.getFilePanel()).getSelectedFileNames();
 
 	}
-}	
+}
