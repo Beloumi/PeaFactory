@@ -20,7 +20,7 @@ package cologne.eck.peafactory.crypto.kdf;
 import org.bouncycastle.crypto.generators.SCrypt;
 
 import cologne.eck.peafactory.crypto.KeyDerivation;
-//import cologne.eck.peafactory.tools.Help;
+//import Help;
 
 public class ScryptKDF extends KeyDerivation {
 	

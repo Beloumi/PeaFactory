@@ -62,7 +62,7 @@ public final class PeaFactory {
 	
 	private static String version = "Peafactory version 0.0";
 	
-	private final static String packagePathName = "cologne" + File.separator + "eck" + File.separator + "peafactory";
+	private final static String packagePathName = "cologne" + File.separator + "eck" + File.separator + "cologne/eck/peafactory";
 	
 	// default algos:
 	private static final KeyDerivation DEFAULT_KDF = new CatenaKDF();

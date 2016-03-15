@@ -35,7 +35,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
-//import cologne.eck.peafactory.tools.MouseRandomCollector;
+//import MouseRandomCollector;
 
 
 @SuppressWarnings("serial")

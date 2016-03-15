@@ -264,7 +264,7 @@ public class FileModifier {
 //+ "import org.bouncycastle.crypto.Digest;\n"
 + "import org.bouncycastle.crypto.digests.*;\n"
 + "import org.bouncycastle.crypto.engines.*;\n"
-+ "import cologne.eck.peafactory.crypto.KeyDerivation;\n"
++ "import KeyDerivation;\n"
 + "import cologne.eck.peafactory.crypto.kdf.*;\n");
 //+ "import cologne.eck.peafactory.peas.gui.*;\n");
 		

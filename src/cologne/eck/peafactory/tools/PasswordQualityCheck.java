@@ -24,7 +24,7 @@ package cologne.eck.peafactory.tools;
  */
 
 /* Used in:
- * 			 cologne.eck.peafactory.gui.MainView.
+ * 			 MainView.
  * 
  *  Note: This is just a simple test. It should 
  *  give only a vague clue. 
