@@ -68,9 +68,9 @@ public final class PswDialogEditor extends PswDialogBase {
 			PswDialogBase.setWorkingMode(args[0]);
 		}		
 		// if the previously internal file was moved to another place: 
-		if(PeaSettings.getExternFile() == false &&
-				new File("resources" + File.separator + "text.lock").exists() == false) {
-			PeaSettings.setExternFile(true);
+		if(!PeaSettings.getExternFile() &&
+				!new File("resources" + File.separator + "text.lock").exists()) {
+//FIXME			PeaSettings.setExternFile(true);
 			PswDialogBase.setEncryptedFileName("");
 		}
 		
