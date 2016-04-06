@@ -21,7 +21,7 @@ package cologne.eck.peafactory.crypto.kdf;
  * Class to call Bcrypt as key derivation function
  */
 
-import org.bouncycastle.crypto.generators.BcryptCore;
+import org.bouncycastle.crypto.generators.BCrypt;
 
 import cologne.eck.peafactory.crypto.KeyDerivation;
 
@@ -56,10 +56,7 @@ public class BcryptKDF extends KeyDerivation {
 
 		byte[] keyMaterial = null;
 		try {
-		    keyMaterial = new BcryptCore().deriveRawKey(
-		    		gettCost(), 
-		    		salt, 
-		    		pswMaterial);
+		    keyMaterial = BCrypt.generate(pswMaterial, salt, gettCost());
 		    } catch (Exception e) {
 			e.printStackTrace();
 		}
