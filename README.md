@@ -6,6 +6,6 @@ These P-assword E-ncrypted A-rchives (PEAs) are small, round (standalone applica
 
 Uses Java Swing and lightweight Bouncy Castle Crypto API. 
 
-Note: This is a test version. Handle carefully. 
-Please report bugs to 
-info 'at' eck.cologne
+Note: This is an old test version. Handle carefully. 
+
+You can find a newer version on https://eck.cologne/peafactory/en/index.html
